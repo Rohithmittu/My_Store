@@ -16,7 +16,7 @@ export const getFeaturedProducts = async (req, res) => {
     let featuredProducts = await redis.get("featured_products");
 
     if (featuredProducts) {
-      return res.json(JSON.oarse(featuredProducts));
+      return res.json(JSON.parse(featuredProducts));
     }
 
     featuredProducts = await Product.find({ isFeatured: true }).lean();
@@ -114,8 +114,8 @@ export const getProductByCategory = async (req, res) => {
   const { category } = req.params;
 
   try {
-    const products = await Product.find(category);
-    res.json(products);
+    const products = await Product.find({ category });
+    res.json({ products });
   } catch (error) {
     console.log("Error in get ProductsById controller", error.message);
     res.status(500).json({ message: "Server error", error: error.message });
@@ -146,6 +146,29 @@ export const toggleFeaturedProduct = async (req, res) => {
     }
   } catch (error) {
     console.log("Error in toggleFeaturedProduct controller", error.message);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+export const getProductsBySearch = async (req, res) => {
+  const { query } = req.params;
+
+  try {
+    // Regular expression to find partial matches
+    const regexQuery = new RegExp(query, "i");
+
+    // Search for matches in both the name and category fields
+    const products = await Product.find({
+      $or: [
+        { name: regexQuery },
+        { category: regexQuery },
+        { description: regexQuery },
+      ],
+    });
+
+    res.json({ products });
+  } catch (error) {
+    console.error("Error in getProductsBySearch controller", error.message);
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };

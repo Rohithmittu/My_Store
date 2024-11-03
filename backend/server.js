@@ -11,7 +11,7 @@ import analyticsRoutes from "./routes/analytics.route.js";
 
 dotenv.config();
 
-const app = express();
+const app = express({ limit: "10mb" });
 const PORT = process.env.PORT || 4001;
 
 app.use(express.json()); // allow us to parse the req.body request
