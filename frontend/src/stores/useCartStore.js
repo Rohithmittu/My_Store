@@ -94,7 +94,7 @@ export const useCartStore = create((set, get) => ({
     const { cart, coupon } = get();
     const subtotal = cart.reduce(
       (sum, item) => sum + item.price * item.quantity,
-      0
+      0 // it is 0 because accumulater where the actual sum start from zero
     );
     let total = subtotal;
 
