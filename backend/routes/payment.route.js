@@ -3,7 +3,6 @@ import { protectedRoute } from "../middleware/auth.middleware.js";
 import {
   checkoutSuccess,
   createCheckoutSession,
-  // createPaymentIntent,
 } from "../controllers/payment.controller.js";
 
 const router = express.Router();
