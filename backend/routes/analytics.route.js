@@ -7,3 +7,5 @@ const router = express.Router();
 router.get("/", protectedRoute, adminRoute, admindashboard);
 
 export default router;
+
+

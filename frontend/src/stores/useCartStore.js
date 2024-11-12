@@ -8,6 +8,8 @@ export const useCartStore = create((set, get) => ({
   total: 0,
   subtotal: 0,
   isCouponApplied: false,
+  shippingInfo: null,
+  paymentIntentId: null,
 
   getMyCoupon: async () => {
     try {
@@ -44,7 +46,7 @@ export const useCartStore = create((set, get) => ({
     }
   },
   clearCart: async () => {
-    set({ cart: [], coupon: null, total: 0, subtotal: 0 });
+    set({ cart: [], coupon: null, total: 0, subtotal: 0, shippingInfo: null });
   },
   addToCart: async (product) => {
     try {
@@ -105,4 +107,12 @@ export const useCartStore = create((set, get) => ({
 
     set({ subtotal, total });
   },
+
+  saveShippingInfo: async (shippingInfo) => {
+    set({ shippingInfo });
+
+    toast.success("Shipping information saved");
+  },
+
+  setPaymentIntentId: (id) => set({ paymentIntentId: id }),
 }));

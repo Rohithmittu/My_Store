@@ -14,6 +14,14 @@ import { useCartStore } from "./stores/useCartStore";
 import PurchaseSuccessPage from "./pages/PurchaseSuccessPage";
 import PurchaseCancelPage from "./pages/PurchaseCancelPage";
 import SearchResults from "./pages/SearchResults";
+import Shipping from "./components/Shipping";
+import PaymentPage from "./components/PaymentPage";
+// import { loadStripe } from "@stripe/stripe-js";
+// import { Elements } from "@stripe/react-stripe-js";
+
+// const stripePromise = loadStripe(
+//   ""
+// );
 
 function App() {
   const { user, checkAuth, checkingAuth } = useUserStore();
@@ -62,6 +70,11 @@ function App() {
             path="/cart"
             element={user ? <CartPage /> : <Navigate to="/login" />}
           />
+          <Route
+            path="/shipping"
+            element={user ? <Shipping /> : <Navigate to="/login" />}
+          />
+          <Route path="/payment" element={<PaymentPage />} />
           <Route
             path="/purchase-success"
             element={user ? <PurchaseSuccessPage /> : <Navigate to="/login" />}
