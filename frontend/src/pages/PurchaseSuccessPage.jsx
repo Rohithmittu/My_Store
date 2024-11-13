@@ -13,37 +13,24 @@ const PurchaseSuccessPage = () => {
   useEffect(() => {
     const handlePaymentSuccess = async (paymentIntentId) => {
       try {
-        // Call backend API to confirm payment and create order
-        const response = await axios.post("/payments/checkout-success", {
+        await axios.post("/payments/checkout-success", {
           paymentIntentId,
         });
-        console.log(response.data, "responsedata111");
-        if (response.data.success) {
-          setOrderDetails({
-            orderNumber: response.data.orderId,
-            deliveryEstimate: "2-3 business days", // Customize this with actual delivery info
-          });
-
-          clearCart(); // Clear cart after successful order confirmation
-        } else {
-          setError(response.data.message || "An unknown error occurred.");
-        }
+        clearCart();
       } catch (err) {
         console.error("Error during payment success:", err);
-        setError("An error occurred while processing your order.");
       } finally {
         setIsProcessing(false);
       }
     };
 
-    // Only run the function if paymentIntentId exists
     if (paymentIntentId) {
       handlePaymentSuccess(paymentIntentId);
     } else {
       setIsProcessing(false);
       setError("No payment intent ID found.");
     }
-  }, [clearCart]); // Depend on paymentIntentId to trigger the effect
+  }, [clearCart]);
 
   if (isProcessing) {
     return (

@@ -111,6 +111,14 @@ export const checkoutSuccess = async (req, res) => {
       const products = JSON.parse(metadata.products);
       const shippingInfo = JSON.parse(metadata.shippingInfo);
 
+      // Deactivate coupon if used
+      if (metadata.couponCode) {
+        await Coupon.findOneAndUpdate(
+          { code: metadata.couponCode, userId: metadata.userId },
+          { isActive: false }
+        );
+      }
+
       // Create new order
       const newOrder = new Order({
         user: metadata.userId,
@@ -127,14 +135,6 @@ export const checkoutSuccess = async (req, res) => {
       await newOrder.save();
       // console.log("New Order Created:", newOrder._id);
 
-      // Deactivate coupon if used
-      if (metadata.couponCode) {
-        await Coupon.findOneAndUpdate(
-          { code: metadata.couponCode, userId: metadata.userId },
-          { isActive: false }
-        );
-      }
-
       return res.status(200).json({
         success: true,
         message:
@@ -148,11 +148,11 @@ export const checkoutSuccess = async (req, res) => {
       });
     }
   } catch (error) {
-    console.error("Error processing successful payment intent:", error);
-    return res.status(500).json({
-      message: "Error processing successful payment intent",
-      error: error.message,
-    });
+    // console.error("Error processing successful payment intent:", error);
+    // return res.status(500).json({
+    //   message: "Error processing successful payment intent",
+    //   error: error.message,
+    // });
   }
 };
 
